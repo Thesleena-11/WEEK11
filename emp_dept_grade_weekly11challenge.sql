@@ -1,0 +1,219 @@
+-- create database emp_grade_db;
+use emp_grade_db;
+-- create table employee(EMP_NO int primary key,ENAME varchar(30) NOT NULL,JOB VARCHAR(50),HIRE_DATE date,SALARY int,COMM int,DEPT_NO int);
+-- create table department(DEPT_NO INT PRIMARY KEY,DNAME varchar(30) NOT NULL,LOC varchar(50));
+-- CREATE table grade(GRADE INT PRIMARY KEY, LOSAL INT,HISAL INT);
+-- INSERT INTO employee VALUES (7369,'smith','clerk',7902,'1980-12-17',800,NULL,20);
+-- ALTER TABLE EMPLOYEE ADD COLUMN MGR INT AFTER JOB;
+-- INSERT INTO EMPLOYEE VALUES (7499,'ALLEN','SALESMAN',7698,'1981-02-20',1600,300,30),
+-- (7521,'WARD','SALESMAN',7698,'1981-02-22',1250,500,30),
+-- (7566,'JONES','MANAGER',7839,'1981-04-02',2975,NULL,20),
+-- (7654,'MARTIN','SALESMAN',7698,'1981-09-28',1250,1400,30),
+-- (7698,'BLAKE','MANAGER',7839,'1981-05-01',2850,NULL,30),
+-- (7782,'CLARK','MANAGER',7839,'1981-06-09',2450,NULL,10),
+-- (7788,'SCOTT','ANALYST',7566,'1987-04-19',3000,NULL,20),
+-- (7839,'KING','PRESIDENT',NULL,'1981-11-17',5000,NULL,10),
+-- (7844,'TURNER','SALESMAN',7698,'1981-09-08',1500,0,30),
+-- (7876,'ADAMS','CLERK',7788,'1987-05-23',1100,NULL,20),
+-- (7900,'JAMES','CLERK',7698,'1981-12-03',950,NULL,30),
+-- (7902,'FORD','ANALYST',7566,'1981-12-03',3000,NULL,20),
+-- (7934,'MILLER','CLERK',7782,'1982-01-23',1300,NULL,10);
+-- INSERT INTO department VALUES(10,'ACCOUNTING','NEW YORK'),
+-- (20,'RESEARCH','DALLAS'),
+-- (30,'SALES','CHICAGO'),
+-- (40,'OPERATIONS','BOSTON');
+-- INSERT INTO grade VALUES (1,700,1200),
+-- (2,1201,1400),
+-- (3,1401,2000),
+-- (4,2001,3000),
+-- (5,3001,9999);
+
+-- Section 1: Basic SELECT Queries
+-- Q: Display all information about all employees.
+-- SELECT * FROM EMPLOYEE;
+-- Q: Display the employee number, name, and salary of all employees.
+-- SELECT EMP_NO,ENAME,SALARY FROM EMPLOYEE;
+-- Q: Display the unique job titles from the EMPLOYEE table.
+-- SELECT DISTINCT JOB FROM EMPLOYEE;
+-- Q: Display the employee name and their annual salary (SAL * 12).
+-- SELECT ENAME,SALARY*12 FROM EMPLOYEE;
+-- Q: Display the details of all employees from department number 10.
+-- SELECT E.ENAME,D.DNAME FROM EMPLOYEE E INNER JOIN DEPARTMENT D ON E.DEPT_NO = D.DEPT_NO WHERE D.DEPT_NO = 10; 
+-- Q: Display the name and job of employees who are ‘CLERK’.
+-- SELECT ENAME,JOB FROM EMPLOYEE WHERE JOB='CLERK';
+-- Q: Display the name of employees whose name starts with ‘S’.
+-- SELECT ENAME FROM EMPLOYEE WHERE ENAME LIKE 'S%';
+-- Q: Display the name of employees where the second letter of their name is ‘L’.
+-- SELECT ENAME FROM EMPLOYEE WHERE ENAME LIKE '_L%';
+-- Q: Display the name of employees who have ‘AR’ in their name.
+-- SELECT ENAME FROM EMPLOYEE WHERE ENAME LIKE '%AR%';
+-- Q: Display the details of employees who were hired in the year 1981.
+-- SELECT ENAME FROM EMPLOYEE WHERE YEAR(HIRE_DATE) = '1981';
+-- Q: Display the name and salary of employees who earn more than 2500.
+-- SELECT ENAME,SALARY FROM EMPLOYEE WHERE SALARY > 2500;
+-- Q: Display the details of employees who are not ‘MANAGER’.
+-- SELECT * FROM EMPLOYEE WHERE JOB <> 'MANAGER';
+-- Q: Display the details of employees who have a commission.
+-- SELECT * FROM EMPLOYEE WHERE COMM IS NOT NULL;
+-- Q: Display the details of employees who do not have a manager.
+-- SELECT * FROM EMPLOYEE WHERE MGR IS NULL;
+-- Q: Display the names of all employees from department 30 who are ‘SALESMAN’.
+-- SELECT E.ENAME,E.JOB,D.DNAME FROM EMPLOYEE E INNER JOIN DEPARTMENT D ON E.DEPT_NO = D.DEPT_NO WHERE E.DEPT_NO = 30 AND E.JOB = 'SALESMAN';
+-- Q: Display the names of all ‘CLERK’s and ‘ANALYST’s.
+-- SELECT ENAME FROM EMPLOYEE WHERE JOB IN ('CLERK','ANALYST');
+-- Q: Display the names of employees whose salary is between 1000 and 2000.
+-- SELECT ENAME,SALARY FROM EMPLOYEE WHERE SALARY BETWEEN 1000 AND 2000; 
+
+-- Section 2: Ordering and Grouping
+-- Q: Display employee details sorted by their name in alphabetical order.
+-- SELECT * FROM EMPLOYEE ORDER BY ENAME ASC;
+-- Q: Display employee details sorted by department number, and then by salary in
+-- descending order.
+-- SELECT * FROM EMPLOYEE ORDER BY DEPT_NO,SALARY DESC;
+-- Q: Display the total number of employees.
+-- SELECT COUNT(*) FROM EMPLOYEE;
+-- Q: Find the total salary paid to all employees.
+-- SELECT SUM(SALARY) FROM EMPLOYEE;
+-- Q: Find the average salary of all employees.
+-- SELECT AVG(SALARY) FROM EMPLOYEE;
+-- Q: Find the maximum and minimum salary from the EMPLOYEE table.
+-- SELECT MIN(SALARY) AS MIN_SAL,MAX(SALARY) AS MAX_SAL FROM EMPLOYEE;
+-- Q: Count the number of employees in each department.
+-- SELECT DEPT_NO,COUNT(*) AS TOT_NO_EMPLOYEES from EMPLOYEE GROUP BY DEPT_NO;
+-- Q: Find the average salary for each job type.
+-- SELECT AVG(SALARY),JOB FROM EMPLOYEE GROUP BY JOB;
+-- Q: Find the total salary for each department.
+-- SELECT d.dept_no,SUM(e.SALARY),D.DNAME FROM EMPLOYEE E right JOIN DEPARTMENT D ON E.DEPT_NO = D.DEPT_NO GROUP BY d.dept_no, D.DNAME;
+-- Q: Display the department numbers that have more than 3 employees.
+-- SELECT dept_no,COUNT(*) AS employee_count FROM employee
+-- GROUP BY dept_no
+-- HAVING COUNT(*) > 3;
+-- Q: Display the jobs where the average salary is more than 2000.
+-- SELECT job,AVG(salary) AS average_salary FROM employee
+-- GROUP BY job
+-- HAVING AVG(salary) > 2000;
+
+-- Section 3: Joins and Subqueries
+-- Q: Display the employee name and their department name.
+-- SELECT e.ename,d.dname FROM employee e LEFT JOIN department d ON e.dept_no = d.dept_no;
+-- Q: Display the employee name, department name, and location for all employees.
+-- SELECT e.ename,d.dname,d.loc FROM employee e
+-- INNER JOIN department d ON e.dept_no = d.dept_no;
+-- Q: Display the name of the employee and the name of their manager.
+-- SELECT e.ename AS employee_name,
+--        m.ename AS manager_name
+-- FROM employee e
+-- LEFT JOIN employee m
+--     ON e.mgr = m.mgr;
+-- Q: Display the employee name, salary, and salary grade.
+-- SELECT e.ename,
+--        e.salary,
+--        s.grade AS salary_grade
+-- FROM employee e
+--  left JOIN grade s
+--     ON e.salary BETWEEN s.losal AND s.hisal;
+-- Q: Display the employee name for those working in ‘NEW YORK’.
+-- SELECT e.ename
+-- FROM employee e
+-- right JOIN department d
+--     ON e.dept_no = d.dept_no
+-- WHERE d.loc = 'NEW YORK';
+-- Q: Find the name of the department where ‘SMITH’ works.
+-- SELECT d.dname
+-- FROM employee e
+-- right JOIN department d
+--     ON e.dept_no = d.dept_no
+-- WHERE e.ename = 'SMITH';
+-- Q: Display the names of employees who earn more than ‘ALLEN’. (Subquery)
+-- SELECT ename FROM employee
+-- WHERE salary > (
+--     SELECT salary
+--     FROM employee
+--     WHERE ename = 'ALLEN'
+-- );
+-- Q: Display the names of employees who work in the same department as ‘SCOTT’.
+-- SELECT ename FROM employee
+-- WHERE dept_no = (
+--     SELECT dept_no
+--     FROM employee
+--     WHERE ename = 'SCOTT'
+-- );
+-- Q: Display the names of employees who have the same job as ‘JONES’.
+-- SELECT ename
+-- FROM employee
+-- WHERE job = (
+--     SELECT job
+--     FROM employee
+--     WHERE ename = 'JONES'
+-- );
+-- Q: Display the names of managers who manage more than 2 employees.
+-- SELECT m.ename AS manager_name,
+--        COUNT(e.emp_no) AS employee_count
+-- FROM employee e
+-- JOIN employee m
+--     ON e.mgr = m.emp_no
+-- GROUP BY m.emp_no, m.ename
+-- HAVING COUNT(e.emp_no) > 2;
+
+-- Section 4: Functions (String, Numeric, Date)
+-- Q: Display the employee names in lowercase.
+-- SELECT LOWER(ename) AS employee_name
+-- FROM employee;
+-- Q: Display the first three characters of each employee’s name.
+-- SELECT ename,
+--        SUBSTRING(ename, 1, 3) AS first_three_characters
+-- FROM employee;
+-- Q: Display the length of each employee’s name.
+-- SELECT ename,
+--        LENGTH(ename) AS name_length
+-- FROM employee;
+-- Q: Display the salary of each employee rounded to the nearest thousand.
+-- SELECT ename,
+--        salary,
+--        ROUND(salary, -3) AS rounded_salary
+-- FROM employee;
+-- Q: Display the remainder of dividing the salary by 1000 for each employee.
+-- SELECT ename,
+--        salary,
+--        MOD(salary, 1000) AS remainder
+-- FROM employee;
+-- Q: Display the current date and time.
+-- SELECT NOW() AS current_date_and_time;
+-- Q: Display the year each employee was hired.
+-- SELECT ename,
+--        YEAR(hire_date) AS hire_year
+-- FROM employee;
+-- Q: Display the name of the month each employee was hired.
+-- SELECT ename,
+--        MONTHNAME(hire_date) AS hire_month
+-- FROM employee;
+-- Q: Display the number of years each employee has been with the company (assuming
+-- the current year is 2025).
+-- SELECT ename,
+--        YEAR(hire_date) AS hire_year,
+--        2025 - YEAR(hire_date) AS years_with_company
+-- FROM employee;
+
+-- Section 5: DDL and DML
+-- Q: Write the SQL command to create the DEPARTMENT table with DEPTNO as the
+-- primary key.
+-- CREATE TABLE departments (
+--     dept_no INT PRIMARY KEY,
+--     dname VARCHAR(50),
+--     location VARCHAR(50)
+-- );
+-- Q: Add a new column PINCODE of type INT to the DEPARTMENT table.
+-- ALTER TABLE departments
+-- ADD pincode INT;
+-- Q: Insert a new record for department 50, ‘HR’, located in ‘HOUSTON’ into
+-- the DEPARTMENT table.
+-- INSERT INTO departments (dept_no, dname, location)
+-- VALUES (50, 'HR', 'HOUSTON');
+-- Q: Update the location of the ‘SALES’ department to ‘ATLANTA’.
+-- UPDATE departments
+-- SET location = 'ATLANTA'
+-- WHERE dname = 'SALES';
+-- Q: Delete the ‘OPERATIONS’ department from the table.
+-- DELETE FROM departments
+-- WHERE dname = 'OPERATIONS';
+-- select * from departments;
